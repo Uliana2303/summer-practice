@@ -1,0 +1,1 @@
+rootProject.name = "ru.epli.epli-backend"
