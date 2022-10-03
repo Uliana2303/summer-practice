@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">epli</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">password</string>
+</resources>
