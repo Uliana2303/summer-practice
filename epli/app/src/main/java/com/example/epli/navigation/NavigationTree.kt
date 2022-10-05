@@ -1,5 +1,5 @@
 package com.example.epli.navigation
 
 enum class NavigationTree {
-    Splash, Login, Main
+    Splash, Login, Main, SeriesDetails
 }
