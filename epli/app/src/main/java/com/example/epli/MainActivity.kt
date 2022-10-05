@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.SideEffect
-import com.example.epli.ui.screens.ApplicationScreen
+import com.example.epli.ui.screens.NavHostInit
 import com.example.epli.ui.theme.EpliTheme
 import com.example.epli.ui.theme.Palette
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                         darkIcons = false
                     )
                 }
-                ApplicationScreen()
+                NavHostInit()
                 }
             }
         }
