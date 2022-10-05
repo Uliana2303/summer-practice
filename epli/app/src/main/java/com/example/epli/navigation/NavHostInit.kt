@@ -14,7 +14,7 @@ import com.example.epli.ui.screens.splash.SplashScreen
 @Composable
 fun NavHostInit(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavigationTree.Splash.name) {
+    NavHost(navController = navController, startDestination = NavigationTree.Main.name) {
         composable(NavigationTree.Splash.name) { SplashScreen(navController) }
         composable(NavigationTree.Login.name) {
             val loginViewModel = hiltViewModel<LoginViewModel>()
