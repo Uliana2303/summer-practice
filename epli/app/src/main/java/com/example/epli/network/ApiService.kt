@@ -3,6 +3,8 @@ package com.example.epli.network
 import com.example.epli.common.AuthResult
 import com.example.epli.common.LoginResult
 import com.example.epli.common.RegisterResult
+import com.example.epli.network.models.FetchSeriesResponse
+import com.example.epli.network.models.GenresRespond
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
@@ -28,6 +30,13 @@ interface ApiService {
     ): RegisterResult
 
     suspend fun tryAuth(token: String) : AuthResult
+
+    suspend fun fetchGenres() : GenresRespond
+
+    suspend fun fetchSeriesByQueryAndId(
+        query: String,
+        genresIdList: List<Int>
+    ) : FetchSeriesResponse
 
     companion object {
         fun create(): ApiService {

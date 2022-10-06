@@ -2,9 +2,9 @@ package com.example.epli.ui.screens.main.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -54,46 +54,38 @@ fun SearchScreen(
                     .padding(8.dp)
                     .fillMaxWidth()
             )
-
-            val list = listOf(
-                "Сёнен",
-                "Экшен",
-                "Фэнтези",
-                "Сверхъестестве",
-                "Школа",
-                "Драма",
-                "Музыка",
-                "Приключения",
-                "Комедия",
-                "Спорт",
-                "Сёдзё",
-                "Романтика",
-                "Повседневность",
-            )
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.weight(1f)
             ) {
-                items(list) { genre ->
-                    Row(
-                        modifier = Modifier.height(40.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Checkbox(
-                            checked = false,
-                            onCheckedChange = {},
-                            colors = CheckboxDefaults.colors(
-                                uncheckedColor = AppTheme.colors.white,
-                                checkedColor = AppTheme.colors.blue,
-                                checkmarkColor = AppTheme.colors.white,
+                viewState.value.genresCheckBoxes.forEach { checkboxEntry ->
+                    item {
+                        Row(
+                            modifier = Modifier.height(40.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = checkboxEntry.value,
+                                onCheckedChange = {
+                                                  viewModel.obtainEvent(SearchEvent.GenreCheckBoxClicked(checkboxEntry.key.id))
+                                },
+                                colors = CheckboxDefaults.colors(
+                                    uncheckedColor = AppTheme.colors.white,
+                                    checkedColor = AppTheme.colors.blue,
+                                    checkmarkColor = AppTheme.colors.white,
+                                )
                             )
-                        )
-                        Text(
-                            text = genre
-                        )
+                            Text(
+                                text = checkboxEntry.key.genre_name
+                            )
+                        }
                     }
                 }
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
             }
 
 

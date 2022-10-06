@@ -5,4 +5,6 @@ object ApiRoutes {
     const val REGISTER = "$BASE_URL/register"
     const val LOGIN = "$BASE_URL/login"
     const val AUTH = "$BASE_URL/auth"
+    const val FETCH_GENRES = "$BASE_URL/genres"
+    const val FETCH_SERIES = "$BASE_URL/series/search"
 }

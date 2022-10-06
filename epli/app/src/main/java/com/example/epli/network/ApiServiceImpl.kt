@@ -78,4 +78,40 @@ class ApiServiceImpl(
             AuthResult.Err
         }
     }
+
+    override suspend fun fetchGenres(): GenresRespond {
+        return try {
+            val response = client.get{
+                url(ApiRoutes.FETCH_GENRES)
+
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> response.body()
+                else -> GenresRespond(emptyList())
+            }
+        } catch (e : IOException) {
+            GenresRespond(emptyList())
+        }
+    }
+
+    override suspend fun fetchSeriesByQueryAndId(
+        query: String,
+        genresIdList: List<Int>
+    ): FetchSeriesResponse {
+        return try {
+            val response = client.post {
+                url(ApiRoutes.FETCH_SERIES)
+                contentType(ContentType.Application.Json)
+                setBody(FetchSeriesRequest(query, genresIdList))
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> response.body()
+                else -> FetchSeriesResponse(seriesList = emptyList())
+            }
+        } catch (e: IOException) {
+            FetchSeriesResponse(seriesList = emptyList())
+        }
+    }
 }
