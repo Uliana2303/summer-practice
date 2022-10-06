@@ -56,13 +56,19 @@ fun SearchScreen(
             )
 
             val list = listOf(
-                "Ужасы",
-                "Драмы",
+                "Сёнен",
+                "Экшен",
+                "Фэнтези",
+                "Сверхъестестве",
+                "Школа",
+                "Драма",
+                "Музыка",
+                "Приключения",
                 "Комедия",
+                "Спорт",
+                "Сёдзё",
                 "Романтика",
-                "Детектив",
-                "Фантастика",
-                "Боевик"
+                "Повседневность",
             )
 
             LazyVerticalGrid(
@@ -71,6 +77,7 @@ fun SearchScreen(
             ) {
                 items(list) { genre ->
                     Row(
+                        modifier = Modifier.height(40.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Checkbox(

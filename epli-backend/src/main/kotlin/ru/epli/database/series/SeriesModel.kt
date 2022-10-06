@@ -1,9 +1,13 @@
 package ru.epli.database.series
 
+import io.ktor.utils.io.errors.*
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inSubQuery
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.epli.database.series_has_genres.SeriesHasGenresModel
 
 
 object SeriesModel: IdTable<Int>("series") {
@@ -29,7 +33,63 @@ object SeriesModel: IdTable<Int>("series") {
         }
     }
 
-    fun fetchSeries(): List<SeriesDTO> {
+    fun fetchSeriesByQueryAndGenresIds(query: String, genresIdList: List<Int>): List<SeriesDTO> {
+        return try {
+            if (genresIdList.isEmpty()) {
+                transaction {
+                    SeriesModel.select(SeriesModel.name.lowerCase().like("%$query%".lowercase())).toList()
+                        .map {
+                            SeriesDTO(
+                                series_id = it[SeriesModel.id].value,
+                                name = it[name],
+                                series_count = it[series_count],
+                                description = it[description],
+                                year = it[year],
+                                seria_time = it[seria_time],
+                                poster = it[poster],
+                            )
+                        }
+                }
+            } else {
+
+                print(transaction {
+                    SeriesModel.select(SeriesModel.name.lowerCase().like("%$query%".lowercase()) and
+                            SeriesModel.id.inSubQuery(SeriesHasGenresModel.querySeriesByGenreId(genresIdList)))
+                        .toList().map {
+                            SeriesDTO(
+                                series_id = it[SeriesModel.id].value,
+                                name = it[name],
+                                series_count = it[series_count],
+                                description = it[description],
+                                year = it[year],
+                                seria_time = it[seria_time],
+                                poster = it[poster],
+                            )
+                        }
+                })
+
+                transaction {
+                    SeriesModel.select(SeriesModel.name.lowerCase().like("%$query%".lowercase()) and
+                                SeriesModel.id.inSubQuery(SeriesHasGenresModel.querySeriesByGenreId(genresIdList)))
+                        .toList().map {
+                        SeriesDTO(
+                            series_id = it[SeriesModel.id].value,
+                            name = it[name],
+                            series_count = it[series_count],
+                            description = it[description],
+                            year = it[year],
+                            seria_time = it[seria_time],
+                            poster = it[poster],
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun fetchAllSeries(): List<SeriesDTO> {
         return try {
             transaction {
                 SeriesModel.selectAll().toList()
@@ -50,4 +110,23 @@ object SeriesModel: IdTable<Int>("series") {
         }
     }
 
+    fun getSeriesById(id: Int) : SeriesDTO? {
+        return try {
+            transaction {
+                SeriesModel.select(SeriesModel.id.eq(id)).toList().map{
+                    SeriesDTO(
+                        series_id = it[SeriesModel.id].value,
+                        name = it[name],
+                        series_count = it[series_count],
+                        description = it[description],
+                        year = it[year],
+                        seria_time = it[seria_time],
+                        poster = it[poster],
+                    )
+                }.single()
+            }
+        } catch (e : IOException) {
+            null
+        }
+    }
 }
