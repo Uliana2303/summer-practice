@@ -8,6 +8,7 @@ import ru.epli.features.login.configureLoginRouting
 import ru.epli.features.poster_images.configurePosterImagesRouting
 import ru.epli.features.register.configureRegisterRouting
 import ru.epli.features.series.configureSeriesRouting
+import ru.epli.features.users_series.configureUsersSeriesRouting
 import ru.epli.plugins.*
 
 fun main() {
@@ -22,5 +23,6 @@ fun main() {
         configureSerialization()
         configurePosterImagesRouting()
         configureGenresRouting()
+        configureUsersSeriesRouting()
     }.start(wait = true)
 }

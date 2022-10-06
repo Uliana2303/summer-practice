@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class UsersHasSeriesDTO(
     val user_id: Int,
     val series_id: Int,
-    val series_viewed: Int,
-    val rating: Int,
-    val notes: String
+    val series_viewed: Int = 0,
+    val rating: Int = 0,
+    val notes: String? = null
 )

@@ -1,11 +1,9 @@
 package ru.epli.database.users_has_series
 
+import io.ktor.utils.io.errors.*
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import ru.epli.database.series.SeriesModel
 import ru.epli.database.users.UserModel
 
@@ -14,7 +12,7 @@ object UsersHasSeriesModel : Table("users_has_series") {
     private val series_id = reference("series_id", SeriesModel.id).uniqueIndex("users_has_series_un")
     private val series_viewed = UsersHasSeriesModel.integer("series_viewed")
     private val rating = UsersHasSeriesModel.integer("rating")
-    private val notes = UsersHasSeriesModel.varchar("notes", 200)
+    private val notes = UsersHasSeriesModel.varchar("notes", 200).nullable()
 
     fun  insert(usersHasSeriesDTO: UsersHasSeriesDTO) {
         transaction {
@@ -23,7 +21,7 @@ object UsersHasSeriesModel : Table("users_has_series") {
                 it[series_id] = usersHasSeriesDTO.series_id
                 it[series_viewed] = usersHasSeriesDTO.series_viewed
                 it[rating] = usersHasSeriesDTO.rating
-                it[notes] = usersHasSeriesDTO.notes
+                it[UsersHasSeriesModel.notes] = usersHasSeriesDTO.notes
             }
         }
     }
@@ -42,12 +40,28 @@ object UsersHasSeriesModel : Table("users_has_series") {
             }
         }
     }
-
     fun updateNotes(userId: Int, seriesId: Int, notes: String) {
         transaction {
             UsersHasSeriesModel.update(where =  {UsersHasSeriesModel.user_id.eq(userId) and UsersHasSeriesModel.series_id.eq(seriesId)}) {
                 it[UsersHasSeriesModel.notes] = notes
             }
+        }
+    }
+
+    fun fetchUsersSeries(userId: Int) : List<UsersHasSeriesDTO> {
+        return try {
+            transaction {
+                UsersHasSeriesModel.select(user_id.eq(userId)).toList().map {
+                    UsersHasSeriesDTO(
+                        user_id = it[user_id].value,
+                        series_id = it[series_id].value,
+                        series_viewed = it[series_viewed],
+                        rating = it[rating]
+                    )
+                }
+            }
+        } catch (e : IOException) {
+            emptyList()
         }
     }
 }
