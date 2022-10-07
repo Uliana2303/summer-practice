@@ -16,4 +16,8 @@ class GenresController(private val call: ApplicationCall) {
             call.respond(HttpStatusCode.BadGateway, "Genres list is empty somehow")
         }
     }
+
+    suspend fun fetchGenresBySeriesId() {
+        val request = call.receive<>()
+    }
 }

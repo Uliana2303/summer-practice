@@ -1,6 +1,9 @@
 package com.example.epli.network
 
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
 import com.example.epli.common.AuthResult
 import com.example.epli.common.LoginResult
 import com.example.epli.common.RegisterResult
@@ -9,8 +12,13 @@ import com.example.epli.network.models.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.http.ContentDisposition.Companion.File
+import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 import io.ktor.utils.io.errors.*
+import java.io.File
 
 
 class ApiServiceImpl(
@@ -31,6 +39,7 @@ class ApiServiceImpl(
                 else -> LoginResult.SomethingWentWrong
             }
         } catch (e: IOException) {
+
             return LoginResult.SomethingWentWrong
         }
     }
@@ -99,19 +108,35 @@ class ApiServiceImpl(
         query: String,
         genresIdList: List<Int>
     ): FetchSeriesResponse {
-        return try {
+//        return try {
             val response = client.post {
                 url(ApiRoutes.FETCH_SERIES)
                 contentType(ContentType.Application.Json)
+                headers {
+                    append("Bearer-Authorization", "46737cbb-0071-42fa-8f4e-0c3ed7074957")
+                }
                 setBody(FetchSeriesRequest(query, genresIdList))
             }
 
-            when (response.status) {
+            return when (response.status) {
                 HttpStatusCode.OK -> response.body()
                 else -> FetchSeriesResponse(seriesList = emptyList())
             }
-        } catch (e: IOException) {
-            FetchSeriesResponse(seriesList = emptyList())
+//        } catch (e: IOException) {
+//            FetchSeriesResponse(seriesList = emptyList())
+//        }
+    }
+
+    override suspend fun getSeriesInfoById(id: Int): GetSeriesInfoRespond {
+        val response = client.post{
+            url(ApiRoutes.SERIES_INFO)
+            contentType(ContentType.Application.Json)
+            setBody(GetSeriesInfoRequest(id = id))
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> response.body()
+            else -> GetSeriesInfoRespond(seriesInfo = null)
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.epli.network
 
+import android.graphics.Bitmap
 import com.example.epli.common.AuthResult
 import com.example.epli.common.LoginResult
 import com.example.epli.common.RegisterResult
 import com.example.epli.network.models.FetchSeriesResponse
 import com.example.epli.network.models.GenresRespond
+import com.example.epli.network.models.GetSeriesInfoRespond
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
@@ -37,6 +39,10 @@ interface ApiService {
         query: String,
         genresIdList: List<Int>
     ) : FetchSeriesResponse
+
+    suspend fun getSeriesInfoById(
+        id: Int
+    ) : GetSeriesInfoRespond
 
     companion object {
         fun create(): ApiService {

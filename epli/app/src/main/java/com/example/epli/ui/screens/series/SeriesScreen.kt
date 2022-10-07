@@ -10,12 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.epli.R
+import com.example.epli.network.ApiRoutes
 import com.example.epli.ui.components.DFilledTextField
 import com.example.epli.ui.components.RatingWidget
 import com.example.epli.ui.screens.series.models.SeriesEvent
@@ -40,36 +43,43 @@ fun SeriesScreen(
             item {
                 Row() {
                     Box(
-                        modifier = Modifier.width(136.dp)
+                        modifier = Modifier
+                            .width(136.dp)
+                            .aspectRatio(9f / 16f)
+
                     ) {
-                        Image(
-                            bitmap = ImageBitmap.imageResource(R.drawable.poster_placeholder),
+                        AsyncImage(
+                            model = "${ApiRoutes.GET_POSTER}${viewState.value.seriesDTO?.poster}",
                             contentDescription = "poster",
+                            modifier = Modifier
+                                .fillMaxHeight(),
+                            contentScale = ContentScale.Crop
                         )
                     }
                     Column(
                         modifier = Modifier.padding(8.dp)
                     ) {
                         Text(
-                            text = "Магическая битва",
+                            text = "${viewState.value.seriesDTO?.name}",
                             fontSize = 24.sp
                         )
                         Text(
-                            text = "Год: 2020",
+                            text = "Год: ${viewState.value.seriesDTO?.year}",
                             modifier = Modifier.padding(top = 16.dp)
                         )
+//                       TODO
+//                        Text(
+//                            text = "Жанры: аниме, боевик, фэнтези, ужасы",
+//                            modifier = Modifier.padding(top = 8.dp)
+//
+//                        )
                         Text(
-                            text = "Жанры: аниме, боевик, фэнтези, ужасы",
+                            text = "Время: ${viewState.value.seriesDTO?.seria_time} мин.",
                             modifier = Modifier.padding(top = 8.dp)
 
                         )
                         Text(
-                            text = "Время: 23 мин.",
-                            modifier = Modifier.padding(top = 8.dp)
-
-                        )
-                        Text(
-                            text = "Серий: 24",
+                            text = "Серий: ${viewState.value.seriesDTO?.series_count}",
                             modifier = Modifier.padding(top = 8.dp)
 
                         )
@@ -91,10 +101,7 @@ fun SeriesScreen(
                         modifier = Modifier.padding(top = 8.dp)
                     )
                     Text(
-                        text = "Мир, в котором демоны питаются людьми, а те об этом даже не догадываются. Когда-то давно самый могущественный демон был повержен, а части его тела разбросаны по свету. Тот, кто сможет их собрать и поглотить, получит безграничную власть и даже сможет уничтожить человечество.\n" +
-                                "\n" +
-                                "Физически развитого старшеклассника Юдзи Итадтори волнуют насущные проблемы — почти всё время парень проводит в больнице с дедушкой, поэтому, чтобы отвязаться от настырных предложений вступить в спортивные клубы, записывается в оккультный. И внезапно оказывается в эпицентре борьбы за людские судьбы, когда его приятели снимают заклятье с некоего магического артефакта.",
-
+                        text = "${viewState.value.seriesDTO?.description}"
                         )
                     Text(
                         text = "Просмотрено: 3/24",

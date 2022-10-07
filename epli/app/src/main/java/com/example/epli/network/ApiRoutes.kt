@@ -7,4 +7,6 @@ object ApiRoutes {
     const val AUTH = "$BASE_URL/auth"
     const val FETCH_GENRES = "$BASE_URL/genres"
     const val FETCH_SERIES = "$BASE_URL/series/search"
+    const val GET_POSTER = "$BASE_URL/series/poster/"
+    const val SERIES_INFO = "$BASE_URL/series/info"
 }
