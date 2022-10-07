@@ -7,10 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.epli.common.EventHandler
 import com.example.epli.network.ApiService
 import com.example.epli.network.models.GenresDTO
-import com.example.epli.network.models.SeriesDTO
 import com.example.epli.ui.screens.main.search.models.SearchEvent
 import com.example.epli.ui.screens.main.search.models.SearchViewState
-import com.example.epli.ui.screens.main.search.models.SeriesInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,11 +77,11 @@ class SearchViewModel @Inject constructor() : ViewModel(), EventHandler<SearchEv
 
 
     private fun searchQueryChanged(value: String) {
-        _viewState.postValue(
+        _viewState.value =
             _viewState.value?.copy(
                 searchQueryValue = value
             )
-        )
+
         refresh()
     }
 

@@ -23,7 +23,10 @@ class MainActivity : ComponentActivity() {
                         darkIcons = false
                     )
                 }
+
+
                 NavHostInit()
+
                 }
             }
         }

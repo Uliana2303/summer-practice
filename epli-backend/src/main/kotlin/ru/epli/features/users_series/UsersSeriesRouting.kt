@@ -21,5 +21,9 @@ fun Application.configureUsersSeriesRouting() {
             usersSeriesController.fetchUsersSeries()
         }
 
+        post("/user/series/info") {
+            val usersSeriesController = UsersSeriesController(call)
+            usersSeriesController.getUsersSeriesInfoById()
+        }
     }
 }

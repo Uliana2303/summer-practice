@@ -19,4 +19,10 @@
     <string name="wrong_password_title">Неверный пароль</string>
     <string name="wrong_login_values_title">Неверные данные авторизации</string>
     <string name="password_required">Необходимо ввести пароль</string>
+    <string name="user_already_exists_title">Email занят</string>
+    <string name="user_already_exists">Пользователь с таким email уже зарегестрирован</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="sign_up_failed">Не удалось зарегестрировать аккаунт</string>
+    <string name="wrong_login_values">Неправильный email или пароль</string>
+    <string name="start_watching">Начать смотреть!</string>
 </resources>

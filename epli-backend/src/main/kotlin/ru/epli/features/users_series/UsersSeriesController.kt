@@ -45,6 +45,14 @@ class UsersSeriesController(private val call: ApplicationCall) {
         }
     }
 
+    suspend fun getUsersSeriesInfoById() {
+        val request = call.receive<GetUsersSeriesInfoRequest>()
+
+        call.respond(GetUsersSeriesInfoResponse(
+            usersSeriesInfo = UsersHasSeriesModel.getUsersSeriesInfoById(request.userId, request.seriesId)
+        ))
+    }
+
     suspend fun fetchUsersSeries() {
         val request = call.receive<FetchUsersSeriesRequest>()
 

@@ -7,4 +7,11 @@ sealed class SeriesEvent {
     data class NotesChanged(
         val value: String
     ) : SeriesEvent()
+
+    object IncreaseViewedClicked : SeriesEvent()
+    object DecreaseViewedClicked : SeriesEvent()
+
+    object StartViewingClicked : SeriesEvent()
+
+    object ScreenClosed : SeriesEvent()
 }

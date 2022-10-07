@@ -6,16 +6,9 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.epli.R
-import com.example.epli.ui.screens.main.search.models.SeriesInfo
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.epli.network.ApiRoutes
 import com.example.epli.network.models.SeriesDTO

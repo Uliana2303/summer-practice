@@ -48,7 +48,7 @@ fun BottomNavComposable(navController: NavController) {
                             }
                         }
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = item.screenRoute != BottomNavItem.Profile.screenRoute
                     }
                 }
             )

@@ -17,7 +17,8 @@ class GenresController(private val call: ApplicationCall) {
         }
     }
 
-    suspend fun fetchGenresBySeriesId() {
-        val request = call.receive<>()
-    }
+//   TODO
+//    suspend fun fetchGenresBySeriesId() {
+//        val request = call.receive<>()
+//    }
 }

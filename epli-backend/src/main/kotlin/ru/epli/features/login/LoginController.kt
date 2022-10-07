@@ -33,4 +33,35 @@ class LoginController(private val call: ApplicationCall) {
             }
         }
     }
+
+    suspend fun getEmailByToken() {
+        val request = call.receive<TokenReceiveRemote>()
+
+        val email = TokenModel.getEmailByToken(request.token)
+
+        call.respond(EmailResponseRemote(email = email!!))
+    }
+
+    suspend fun getUsernameByToken() {
+        val request = call.receive<TokenReceiveRemote>()
+
+        val email = TokenModel.getEmailByToken(request.token)
+        val username = UserModel.getUsernameByEmail(email!!)
+
+
+        call.respond(UsernameResponseRemote(username = username))
+    }
+
+    suspend fun getUserIdByToken() {
+        val request = call.receive<TokenReceiveRemote>()
+
+        val email = TokenModel.getEmailByToken(request.token)
+        val userId = if (email == null) {
+            null
+        } else {
+            UserModel.getUserIdByEmail(email)
+        }
+
+        call.respond(UserIdResponse(userId))
+    }
 }

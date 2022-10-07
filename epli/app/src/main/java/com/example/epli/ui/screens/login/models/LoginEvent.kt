@@ -8,5 +8,4 @@ sealed class LoginEvent {
     object SignInClicked : LoginEvent()
     object SignUpClicked : LoginEvent()
     object DialogOkClicked : LoginEvent()
-
 }

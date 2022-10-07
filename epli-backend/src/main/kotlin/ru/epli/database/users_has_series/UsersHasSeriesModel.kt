@@ -48,6 +48,26 @@ object UsersHasSeriesModel : Table("users_has_series") {
         }
     }
 
+
+
+    fun getUsersSeriesInfoById(userId: Int, seriesId: Int) : UsersHasSeriesDTO? {
+        return  try {
+            transaction {
+                UsersHasSeriesModel.select(user_id.eq(userId) and series_id.eq(seriesId)).toList().map {
+                    UsersHasSeriesDTO(
+                        user_id = it[user_id].value,
+                        series_id = it[series_id].value,
+                        series_viewed = it[series_viewed],
+                        rating = it[rating],
+                        notes = it[notes]
+                    )
+                }.single()
+            }
+        } catch (e : IOException) {
+            return null
+        }
+    }
+
     fun fetchUsersSeries(userId: Int) : List<UsersHasSeriesDTO> {
         return try {
             transaction {

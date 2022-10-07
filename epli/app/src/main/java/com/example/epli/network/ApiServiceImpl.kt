@@ -1,9 +1,6 @@
 package com.example.epli.network
 
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.compose.ui.graphics.ImageBitmap
 import com.example.epli.common.AuthResult
 import com.example.epli.common.LoginResult
 import com.example.epli.common.RegisterResult
@@ -12,13 +9,8 @@ import com.example.epli.network.models.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.http.ContentDisposition.Companion.File
-import io.ktor.util.cio.*
-import io.ktor.utils.io.*
 import io.ktor.utils.io.errors.*
-import java.io.File
 
 
 class ApiServiceImpl(
@@ -45,17 +37,15 @@ class ApiServiceImpl(
     }
 
     override suspend fun tryRegister(
+        login: String,
         email: String,
         password: String,
-        name: String,
-        secondName: String,
-        patronymicName: String?
     ): RegisterResult {
         try {
         val response = client.post {
             url(ApiRoutes.REGISTER)
             contentType(ContentType.Application.Json)
-            setBody(RegisterRequestRemote(email, name, secondName, patronymicName ?: "", password))
+            setBody(RegisterRequestRemote(login, email, password))
         }
 
 
@@ -138,5 +128,95 @@ class ApiServiceImpl(
             HttpStatusCode.OK -> response.body()
             else -> GetSeriesInfoRespond(seriesInfo = null)
         }
+    }
+
+    override suspend fun getUssSeriesInfoById(
+        userId: Int,
+        seriesId: Int
+    ): GetUsersSeriesInfoResponse {
+        val response = client.post{
+            url(ApiRoutes.USERS_SERIES_INFO)
+            contentType(ContentType.Application.Json)
+            setBody(GetUsersSeriesInfoRequest(userId, seriesId))
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> response.body()
+            else -> GetUsersSeriesInfoResponse(usersSeriesInfo = null)
+        }
+    }
+
+    override suspend fun getUserIdByToken(token: String): UserIdResponse {
+        val response = client.post {
+            url(ApiRoutes.GET_USER_ID)
+            contentType(ContentType.Application.Json)
+            setBody(TokenRequest(token))
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> response.body()
+            else -> UserIdResponse(null)
+        }
+    }
+
+    override suspend fun addUsersSeries(userId: Int, seriesId: Int) {
+        val response = client.post{
+            url(ApiRoutes.ADD_USERS_SERIES)
+            contentType(ContentType.Application.Json)
+            setBody(AddUsersSeriesRequest(userId, seriesId))
+        }
+
+    }
+
+    override suspend fun updateUsersSeries(userId: Int, seriesId: Int, viewed: Int?, rating: Int?, notes: String?) {
+        val response = client.post{
+            url(ApiRoutes.UPDATE_USERS_SERIES)
+            contentType(ContentType.Application.Json)
+            setBody(UpdateUsersSeriesRequest(
+                userId = userId,
+                seriesId = seriesId,
+                viewed = viewed,
+                rating = rating,
+                notes = notes
+            ))
+        }
+    }
+
+    override suspend fun getEmailByToken(token: String): EmailResponse {
+        val response = client.post{
+            url(ApiRoutes.GET_USER_EMAIL_BY_TOKEN)
+            contentType(ContentType.Application.Json)
+            setBody(
+                TokenRequest(token = token)
+            )
+        }
+
+        return response.body()
+    }
+
+    override suspend fun getUsernameByToken(token: String): UsernameResponse {
+        val response = client.post{
+            url(ApiRoutes.GET_USERNAME_BY_TOKEN)
+            contentType(ContentType.Application.Json)
+            setBody(
+                TokenRequest(token = token)
+            )
+        }
+
+        return response.body()
+    }
+
+    override suspend fun fetchUsersSeries(userId: Int): FetchUsersSeriesResponse {
+        val response = client.post{
+            url(ApiRoutes.USERS_SERIES)
+            contentType(ContentType.Application.Json)
+            setBody(
+                UserIdResponse(
+                    userId = userId
+                )
+            )
+        }
+
+        return response.body()
     }
 }

@@ -6,6 +6,7 @@ data class SeriesViewState(
     val seriesDTO: SeriesDTO? = null,
 //    TODO
 //    val genresList: List<String> = emptyList(),
+    val is_watching: Boolean = false,
     val viewed: Int = 0,
     val ratingValue: Int = 0,
     val notesValue: String = ""
