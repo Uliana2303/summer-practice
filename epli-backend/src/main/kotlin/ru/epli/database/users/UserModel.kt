@@ -1,5 +1,6 @@
 package ru.epli.database.users
 
+import io.ktor.utils.io.errors.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Column
@@ -22,6 +23,29 @@ object UserModel: IdTable<Int>("users") {
                 it[email] = userDTO.email
             }
         }
+    }
+
+    fun getUserIdByEmail(email: String) : Int? {
+        return try {
+            transaction {
+                UserModel.select { UserModel.email.eq(email) }.toList()
+                    .map{
+                        it[UserModel.id].value
+                    }.single()
+            }
+        } catch (e : IOException) {
+            null
+        }
+    }
+
+    fun getUsernameByEmail(email: String) : String {
+        return transaction {
+                UserModel.select { UserModel.email.eq(email) }.toList()
+                    .map{
+                        it[UserModel.login]
+                    }.single()
+            }
+
     }
 
     fun fetchUser(email: String): UserDTO? {

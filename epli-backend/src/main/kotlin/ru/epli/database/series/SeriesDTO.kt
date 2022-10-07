@@ -1,8 +1,10 @@
 package ru.epli.database.series
 
+import kotlinx.serialization.Serializable
 import ru.epli.features.series.CreateSeriesRequest
 import ru.epli.features.series.CreateSeriesResponse
 
+@Serializable
 data class SeriesDTO(
     val series_id: Int,
     val name: String,

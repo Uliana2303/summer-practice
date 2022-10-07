@@ -1,7 +1,9 @@
 package ru.epli.database.tokens
 
+import io.ktor.utils.io.errors.*
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -19,6 +21,20 @@ object TokenModel: IdTable<Int>("tokens") {
             }
         }
     }
+
+    fun getEmailByToken(token: String) : String? {
+        return try {
+            transaction {
+                TokenModel.select { TokenModel.token.eq(token) }.toList()
+                    .map {
+                        it[email]
+                    }.single()
+            }
+        } catch (e : IOException) {
+            return null
+        }
+    }
+
 
     fun fetchTokens(): List<TokenDTO> {
         return try {

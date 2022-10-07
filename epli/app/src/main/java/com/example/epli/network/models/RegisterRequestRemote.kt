@@ -6,10 +6,8 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 data class RegisterRequestRemote(
+    val login: String,
     val email: String,
-    val name: String,
-    val secondName: String,
-    val patronymicName: String,
     val password: String
 )
 

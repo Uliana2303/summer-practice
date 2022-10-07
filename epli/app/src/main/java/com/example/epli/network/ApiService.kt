@@ -3,6 +3,7 @@ package com.example.epli.network
 import com.example.epli.common.AuthResult
 import com.example.epli.common.LoginResult
 import com.example.epli.common.RegisterResult
+import com.example.epli.network.models.*
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
@@ -20,14 +21,58 @@ interface ApiService {
     ): LoginResult
 
     suspend fun tryRegister(
+        login: String,
         email: String,
         password: String,
-        name: String,
-        secondName: String,
-        patronymicName: String?
+
     ): RegisterResult
 
     suspend fun tryAuth(token: String) : AuthResult
+
+    suspend fun fetchGenres() : GenresRespond
+
+    suspend fun fetchSeriesByQueryAndId(
+        query: String,
+        genresIdList: List<Int>
+    ) : FetchSeriesResponse
+
+    suspend fun addUsersSeries(
+        userId: Int,
+        seriesId: Int
+    )
+
+    suspend fun updateUsersSeries(
+        userId: Int,
+        seriesId: Int,
+        viewed: Int?,
+        rating: Int?,
+        notes: String?
+    )
+
+    suspend fun getUserIdByToken(
+        token : String
+    ) : UserIdResponse
+
+    suspend fun getEmailByToken(
+        token: String
+    ) : EmailResponse
+
+    suspend fun fetchUsersSeries(
+        userId: Int
+    ) : FetchUsersSeriesResponse
+
+    suspend fun getUsernameByToken(
+        token: String
+    ) : UsernameResponse
+
+    suspend fun getUssSeriesInfoById(
+        userId: Int,
+        seriesId: Int
+    ) : GetUsersSeriesInfoResponse
+
+    suspend fun getSeriesInfoById(
+        id: Int
+    ) : GetSeriesInfoRespond
 
     companion object {
         fun create(): ApiService {

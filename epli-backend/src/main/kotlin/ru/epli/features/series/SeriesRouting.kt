@@ -12,9 +12,14 @@ import java.util.*
 fun Application.configureSeriesRouting() {
 
     routing {
-        post("/games/search") {
+        post("/series/search") {
             val seriesController = SeriesController(call)
             seriesController.performSearch()
+        }
+
+        post("series/info") {
+            val seriesController = SeriesController(call)
+            seriesController.getSeriesInfoById()
         }
 
         post("/series/add") {
